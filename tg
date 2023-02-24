@@ -1,0 +1,25 @@
+import telegram
+from telegram.ext import CommandHandler, MessageHandler, Filters, Updater
+
+# inisialisasi bot telegram
+bot = telegram.Bot(token='your_token_here')
+
+# handler untuk perintah '/start'
+def start(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Halo! Saya adalah bot Telegram sederhana. Silakan kirimkan pesan kepada saya.")
+
+# handler untuk pesan masuk
+def echo(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
+
+# inisialisasi updater dan dispatcher
+updater = Updater(token='your_token_here', use_context=True)
+dispatcher = updater.dispatcher
+
+# menambahkan handler untuk perintah '/start' dan pesan masuk
+dispatcher.add_handler(CommandHandler('start', start))
+dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+
+# menjalankan bot
+updater.start_polling()
+updater.idle()
